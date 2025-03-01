@@ -99,13 +99,13 @@ def detect_rooms_advanced(image_path, output_dir=None, min_area=5000):
 
 if __name__ == "__main__":
     # Example usage
-    test_image_path = "resources/images/test_1.png"  # Adjust path as needed
-    output_rooms_dir = "resources/processed/rooms"
+    test_image_path = "resources/images/page_2.png"  # Adjust path as needed
+    output_rooms_dir = "resources/processed/rooms/advanced"
 
     detected_rooms = detect_rooms_advanced(
         test_image_path,
         output_dir=output_rooms_dir,
-        min_area=8000
+        min_area=1000
     )
 
     print(f"Found {len(detected_rooms)} rooms.")
