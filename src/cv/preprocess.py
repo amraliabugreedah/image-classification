@@ -1,5 +1,8 @@
 import cv2
 import os
+from datetime import datetime
+import base64
+import json
 
 
 def preprocess_image(image_path, output_path=None):
@@ -43,16 +46,50 @@ def preprocess_image(image_path, output_path=None):
 
 
 if __name__ == "__main__":
-    # Define the path for the input image in the resources folder
-    resources_dir = os.path.join(os.getcwd(), "resources", "images")
-    image_filename = "sample_plan.png"  # Change to your actual image filename
-    image_path = os.path.join(resources_dir, image_filename)
 
-    # Define an output directory and filename for the preprocessed image
-    output_dir = os.path.join(os.getcwd(), "resources", "processed")
-    os.makedirs(output_dir, exist_ok=True)
-    output_path = os.path.join(output_dir, "preprocessed_sample_plan.png")
+    # List of image names to preprocess
 
-    # Run preprocessing
-    preprocessed_image = preprocess_image(image_path, output_path)
-    print("Preprocessing complete. Saved preprocessed image at:", output_path)
+    resources_dir = os.path.join(os.getcwd(), "resources", "images", "base64toimg")
+    image_names = [
+        os.path.splitext(f)[0] for f in os.listdir(resources_dir) if f.endswith(".png")
+    ]
+
+    base64_list = []
+
+    for image_name in image_names:
+        # Define the path for the input image in the resources folder
+        image_filename = f"{image_name}.png"  # Change to your actual image filename
+        image_path = os.path.join(resources_dir, image_filename)
+
+        # Define an output directory and filename for the preprocessed image
+        output_dir = os.path.join(
+            os.getcwd(), "resources", "processed", "test_tokens", "img"
+        )
+        os.makedirs(output_dir, exist_ok=True)
+        output_path = os.path.join(output_dir, f"preprocessed_{image_name}.png")
+
+        # Run preprocessing
+        preprocessed_image = preprocess_image(image_path, output_path)
+        print("Preprocessing complete. Saved preprocessed image at:", output_path)
+
+        base_64_output_dir = os.path.join(
+            os.getcwd(), "resources", "processed", "test_tokens", "basea64"
+        )
+
+        os.makedirs(base_64_output_dir, exist_ok=True)
+        # Generate a timestamp for the output filename
+        timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+        base64_output_path = os.path.join(
+            base_64_output_dir, f"preprocessed_{timestamp}.json"
+        )
+
+        # Convert the preprocessed image to base64
+        _, buffer = cv2.imencode(".png", preprocessed_image)
+        base64_image = base64.b64encode(buffer).decode("utf-8")
+        base64_list.append(base64_image)
+
+    # Save the base64 string to a file
+    with open(base64_output_path, "w") as f:
+      json.dump(base64_list, f)
+
+    print("Base64 encoding complete. Saved base64 list at:", base64_output_path)

@@ -1,9 +1,10 @@
 import os
 from pdf2image import convert_from_path
+import time
 
 
 def pdf_to_images(
-    pdf_path, dpi=300, output_folder=None, crop_margin=0, margin_in_percent=False
+    pdf_path, dpi=200, output_folder=None, crop_margin=0, margin_in_percent=False
 ):
     """
     Convert a PDF file to high-quality PNG images.
@@ -18,7 +19,9 @@ def pdf_to_images(
         list: A list of file paths to the generated images.
     """
     # Convert PDF pages to images using pdf2image
-    images = convert_from_path(pdf_path, dpi=dpi, fmt="png")
+    images = convert_from_path(
+        pdf_path, dpi=100, fmt="png", thread_count=os.cpu_count(), use_pdftocairo=True
+    )
     output_paths = []
 
     # Save each image if an output folder is provided
@@ -80,20 +83,22 @@ def pdf_to_images(
 if __name__ == "__main__":
     # Example usage
     pdf_path = os.path.join(os.getcwd(), "resources", "pdfs", "sample_plan.pdf")
-    output_folder = os.path.join(os.getcwd(), "resources", "images")
+    output_folder = os.path.join(os.getcwd(), "resources", "images", "pdf-to-images")
 
-    # # Different margins for each side (left, top, right, bottom)
-    # images_tuple = pdf_to_images(
-    #     pdf_path, dpi=300, output_folder=output_folder, crop_margin=(150, 150, 1600, 150)
-    # )
+    start_time = time.time()
 
     # Use different percentage margins for each side (left, top, right, bottom)
     images_tuple = pdf_to_images(
         pdf_path,
         dpi=300,
         output_folder=output_folder,
-        crop_margin=(0.023, 0.023, 0.22, 0.023),
+        crop_margin=0,
+        # crop_margin=(0.023, 0.023, 0.22, 0.023),
         margin_in_percent=True,
     )
 
+    end_time = time.time()
+    elapsed_time = end_time - start_time
+
     print("Converted pages:", images_tuple)
+    print(f"Time taken: {elapsed_time:.2f} seconds")

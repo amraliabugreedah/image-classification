@@ -1,6 +1,7 @@
 import ezdxf
 from shapely.geometry import Polygon, Point
 import os
+import json
 
 
 def get_entity_text(entity):
@@ -75,7 +76,7 @@ def extract_rooms_from_dwg(dwg_path):
 
 if __name__ == "__main__":
     base_dir = os.getcwd()
-    dwg_file = os.path.join(base_dir, "resources", "dw", "sample.dxf")
+    dwg_file = os.path.join(base_dir, "resources", "dw", "sample.dwf")
     # output_dir = os.path.join(base_dir, "resources", "processed", "rooms", "segmented")
 
     extracted_rooms = extract_rooms_from_dwg(dwg_file)
