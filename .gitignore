@@ -65,11 +65,11 @@ venv.bak/
 # macOS files
 .DS_Store
 
-# Output directories
-resources/processed/
+# # Output directories
+# resources/processed/
 
-# Files directories
-resources/images/
-resources/pdfs/
-resources/dw/
+# # Files directories
+# resources/images/
+# resources/pdfs/
+# resources/dw/
 
